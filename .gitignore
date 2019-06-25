@@ -352,3 +352,4 @@ obj
 .DS_Store
 .vs
 node_modules
+BangazonAPI.csproj.user
