@@ -19,6 +19,10 @@ Please delete options that are not relevant.
 
 Please describe the tests required to verify your changes. Provide instructions so PR Tester can check functionality. Please also list any relevant details for your tests
 
+`git checkout master`
+`git fetch --all`
+`git checkout [branch-name]`
+`start BangazonAPI.csproj`
 
 
 # Checklist:
