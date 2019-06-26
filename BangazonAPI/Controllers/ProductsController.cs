@@ -70,9 +70,41 @@ namespace BangazonAPI.Controllers
 
         // GET: api/Products/5
         [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            return "value";
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"SELECT
+                                        Id, Price, Quantity, Title, Description, ProductTypeId, CustomerId
+                                        FROM Product
+                                        WHERE Id = @id";
+                    cmd.Parameters.Add(new SqlParameter("@id", id));
+                    SqlDataReader reader = await cmd.ExecuteReaderAsync();
+
+                    Product product = null;
+                    if (reader.Read())
+                    {
+                         product = new Product
+                        {
+                            Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                            Price = reader.GetDecimal(reader.GetOrdinal("Price")),
+                            Quantity = reader.GetInt32(reader.GetOrdinal("Quantity")),
+                            Title = reader.GetString(reader.GetOrdinal("Title")),
+                            Description = reader.GetString(reader.GetOrdinal("Description")),
+                            ProductTypeId = reader.GetInt32(reader.GetOrdinal("ProductTypeId")),
+                            CustomerId = reader.GetInt32(reader.GetOrdinal("CustomerId"))
+
+                        };
+                    }
+
+                    reader.Close();
+
+                    return Ok(product);
+                }
+            }
         }
 
         // POST: api/Products
