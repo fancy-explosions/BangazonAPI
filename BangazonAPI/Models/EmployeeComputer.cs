@@ -13,7 +13,7 @@ namespace BangazonAPI.Models
         [Required]
         public DateTime Assign { get; set; }
 
-        [Required]
+        
         public DateTime Unassign { get; set; }
 
         [Required]
