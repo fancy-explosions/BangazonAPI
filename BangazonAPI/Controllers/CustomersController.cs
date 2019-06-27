@@ -39,7 +39,7 @@ namespace BangazonAPI.Controllers
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = "Write your SQL statement here to get all customers";
+                    cmd.CommandText = "SELECT Id, FirstName, LastName FROM Customer";
                     SqlDataReader reader = await cmd.ExecuteReaderAsync();
 
                     List<Customer> customers = new List<Customer>();
@@ -63,16 +63,24 @@ namespace BangazonAPI.Controllers
             }
         }
 
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        //// GET api/values/5
+        // [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetCustomer")]
+        public async Task<IActionResult> Get([FromRoute] int id)
         {
+            if (!CustomerExists(id))
+            {
+                return new StatusCodeResult(StatusCodes.Status404NotFound);
+            }
             using (SqlConnection conn = Connection)
             {
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = "Write your SQL statement here to get a single customer";
+                    cmd.CommandText = @"SELECT 
+                                            Id, FirstName, LastName
+                                        FROM Customer
+                                        WHERE Id = @id";
                     cmd.Parameters.Add(new SqlParameter("@id", id));
                     SqlDataReader reader = await cmd.ExecuteReaderAsync();
 
@@ -119,55 +127,55 @@ namespace BangazonAPI.Controllers
             }
         }
 
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] Customer customer)
-        {
-            try
-            {
-                using (SqlConnection conn = Connection)
-                {
-                    conn.Open();
-                    using (SqlCommand cmd = conn.CreateCommand())
-                    {
-                        cmd.CommandText = @"
-                            UPDATE Customer
-                            SET FirstName = @firstName
-                            -- Set the remaining columns here
-                            WHERE Id = @id
-                        ";
-                        cmd.Parameters.Add(new SqlParameter("@id", customer.Id));
-                        cmd.Parameters.Add(new SqlParameter("@firstName", customer.FirstName));
+        //// PUT api/values/5
+        //[HttpPut("{id}")]
+        //public async Task<IActionResult> Put(int id, [FromBody] Customer customer)
+        //{
+        //    try
+        //    {
+        //        using (SqlConnection conn = Connection)
+        //        {
+        //            conn.Open();
+        //            using (SqlCommand cmd = conn.CreateCommand())
+        //            {
+        //                cmd.CommandText = @"
+        //                    UPDATE Customer
+        //                    SET FirstName = @firstName
+        //                    -- Set the remaining columns here
+        //                    WHERE Id = @id
+        //                ";
+        //                cmd.Parameters.Add(new SqlParameter("@id", customer.Id));
+        //                cmd.Parameters.Add(new SqlParameter("@firstName", customer.FirstName));
 
-                        int rowsAffected = await cmd.ExecuteNonQueryAsync();
+        //                int rowsAffected = await cmd.ExecuteNonQueryAsync();
 
-                        if (rowsAffected > 0)
-                        {
-                            return new StatusCodeResult(StatusCodes.Status204NoContent);
-                        }
+        //                if (rowsAffected > 0)
+        //                {
+        //                    return new StatusCodeResult(StatusCodes.Status204NoContent);
+        //                }
 
-                        throw new Exception("No rows affected");
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                if (!CustomerExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-        }
+        //                throw new Exception("No rows affected");
+        //            }
+        //        }
+        //    }
+        //    catch (Exception)
+        //    {
+        //        if (!CustomerExists(id))
+        //        {
+        //            return NotFound();
+        //        }
+        //        else
+        //        {
+        //            throw;
+        //        }
+        //    }
+        //}
 
         // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
-        {
-        }
+        //[HttpDelete("{id}")]
+        //public async Task<IActionResult> Delete(int id)
+        //{
+        //}
 
         private bool CustomerExists(int id)
         {
