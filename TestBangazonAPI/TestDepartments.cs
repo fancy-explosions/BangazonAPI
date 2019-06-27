@@ -26,13 +26,30 @@ namespace TestBangazonAPI
 
 
                 string responseBody = await response.Content.ReadAsStringAsync();
-                var customers = JsonConvert.DeserializeObject<List<Customer>>(responseBody);
+                var departments = JsonConvert.DeserializeObject<List<Department>>(responseBody);
 
                 /*
                     ASSERT
                 */
                 Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-                Assert.True(customers.Count > 0);
+                Assert.True(departments.Count > 0);
+            }
+        }
+        [Fact]
+        public async Task Test_Get_Single_Department()
+        {
+            using (var client = new APIClientProvider().Client)
+            {
+                var response = await client.GetAsync("api/Departments/3");
+
+                string responseBody = await response.Content.ReadAsStringAsync();
+                var department = JsonConvert.DeserializeObject<Department>(responseBody);
+
+                Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+                Assert.Equal("Department of Departing Departments", department.Name);
+                Assert.Equal(32, department.Budget);
+                Assert.NotNull(department);
+
             }
         }
     }
