@@ -171,7 +171,7 @@ namespace BangazonAPI.Controllers
         //    }
         //}
 
-        // DELETE api/values/5
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
@@ -207,6 +207,8 @@ namespace BangazonAPI.Controllers
             }
 
         }
+
+
 
         private bool CustomerExists(int id)
         {
