@@ -17,7 +17,7 @@ namespace BangazonAPI.Models
         public int CustomerId { get; set; }
 
         [Required]
-        public double Price { get; set; }
+        public decimal Price { get; set; }
 
         [Required]
         public string Title { get; set; }
