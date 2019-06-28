@@ -39,7 +39,7 @@ namespace BangazonAPI.Controllers
                 {
                     cmd.CommandText = @"SELECT Id, Price, Quantity, Title,
                                       ProductTypeId, CustomerId, [Description]
-                                      FROM Product 
+                                      FROM Product
                                      ";
                     SqlDataReader reader = await cmd.ExecuteReaderAsync();
 

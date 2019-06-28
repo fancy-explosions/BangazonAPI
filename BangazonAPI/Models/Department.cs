@@ -11,12 +11,12 @@ namespace BangazonAPI.Models
 
         public int Id { get; set; }
 
-        [Required]
-        public int Budget { get; set; }
 
         [Required]
         public string Name { get; set; }
 
+        [Required]
+        public int Budget { get; set; }
         public List<Employee> DeptEmployees { get; set; } = new List<Employee>();
 
 

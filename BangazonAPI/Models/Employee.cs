@@ -16,7 +16,7 @@ namespace BangazonAPI.Models
 
         public string LastName { get; set; }
 
-        public bool isSupervisor { get; set; }
+        public bool IsSupervisor { get; set; }
 
         public List<TrainingProgram> TrainingPrograms { get; set; } = new List<TrainingProgram>();
     }
