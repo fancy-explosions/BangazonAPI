@@ -39,7 +39,7 @@ namespace BangazonAPI.Controllers
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = "Write your SQL statement here to get all customers";
+                    cmd.CommandText = "SELECT Id, FirstName, LastName FROM Customer";
                     SqlDataReader reader = await cmd.ExecuteReaderAsync();
 
                     List<Customer> customers = new List<Customer>();
@@ -63,16 +63,24 @@ namespace BangazonAPI.Controllers
             }
         }
 
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        //// GET api/values/5
+        // [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetCustomer")]
+        public async Task<IActionResult> Get([FromRoute] int id)
         {
+            if (!CustomerExists(id))
+            {
+                return new StatusCodeResult(StatusCodes.Status404NotFound);
+            }
             using (SqlConnection conn = Connection)
             {
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = "Write your SQL statement here to get a single customer";
+                    cmd.CommandText = @"SELECT 
+                                            Id, FirstName, LastName
+                                        FROM Customer
+                                        WHERE Id = @id";
                     cmd.Parameters.Add(new SqlParameter("@id", id));
                     SqlDataReader reader = await cmd.ExecuteReaderAsync();
 
@@ -163,28 +171,28 @@ namespace BangazonAPI.Controllers
         //    }
         //}
 
-        //// DELETE api/values/5
+        // DELETE api/values/5
         //[HttpDelete("{id}")]
         //public async Task<IActionResult> Delete(int id)
         //{
         //}
 
-        //private bool CustomerExists(int id)
-        //{
-        //    using (SqlConnection conn = Connection)
-        //    {
-        //        conn.Open();
-        //        using (SqlCommand cmd = conn.CreateCommand())
-        //        {
-        //            // More string interpolation
-        //            cmd.CommandText = "SELECT Id FROM Customer WHERE Id = @id";
-        //            cmd.Parameters.Add(new SqlParameter("@id", id));
+        private bool CustomerExists(int id)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    // More string interpolation
+                    cmd.CommandText = "SELECT Id FROM Customer WHERE Id = @id";
+                    cmd.Parameters.Add(new SqlParameter("@id", id));
 
-        //            SqlDataReader reader = cmd.ExecuteReader();
+                    SqlDataReader reader = cmd.ExecuteReader();
 
-        //            return reader.Read();
-        //        }
-        //    }
-        //}
+                    return reader.Read();
+                }
+            }
+        }
     }
 }
